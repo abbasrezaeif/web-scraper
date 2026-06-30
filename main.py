@@ -2,6 +2,7 @@ import csv
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from openpyxl import Workbook
 
 
 def scrape_page(url):
@@ -9,7 +10,6 @@ def scrape_page(url):
     soup = BeautifulSoup(response.text, "html.parser")
 
     quotes_data = []
-
     quote_blocks = soup.find_all("div", class_="quote")
 
     for block in quote_blocks:
@@ -42,11 +42,23 @@ def scrape_page(url):
 def save_to_csv(quotes_data):
     with open("quotes.csv", "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-
         writer.writerow(["Quote", "Author", "Tags"])
 
         for row in quotes_data:
             writer.writerow(row)
+
+
+def save_to_excel(quotes_data):
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Quotes"
+
+    sheet.append(["Quote", "Author", "Tags"])
+
+    for row in quotes_data:
+        sheet.append(row)
+
+    workbook.save("quotes.xlsx")
 
 
 def main():
@@ -58,14 +70,14 @@ def main():
         print(f"Scraping: {url}")
 
         quotes_data, next_url = scrape_page(url)
-
         all_quotes.extend(quotes_data)
 
         url = next_url
 
     save_to_csv(all_quotes)
+    save_to_excel(all_quotes)
 
-    print(f"\nDone. {len(all_quotes)} quotes saved to quotes.csv")
+    print(f"\nDone. {len(all_quotes)} quotes saved to quotes.csv and quotes.xlsx")
 
 
 if __name__ == "__main__":
