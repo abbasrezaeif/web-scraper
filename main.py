@@ -11,7 +11,12 @@ def main():
 
     title = soup.title.text
 
-    print(f"Page title: {title}")
+    print(f"\nPage title: {title}\n")
+
+    first_quote = soup.find("span", class_="text")
+
+    print("First Quote:")
+    print(first_quote.text)
 
 
 if __name__ == "__main__":
