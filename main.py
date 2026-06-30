@@ -9,14 +9,15 @@ def main():
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    title = soup.title.text
+    print(f"\nPage title: {soup.title.text}\n")
 
-    print(f"\nPage title: {title}\n")
+    quotes = soup.find_all("span", class_="text")
 
-    first_quote = soup.find("span", class_="text")
+    print(f"Found {len(quotes)} quotes:\n")
 
-    print("First Quote:")
-    print(first_quote.text)
+    for index, quote in enumerate(quotes, start=1):
+        print(f"{index}. {quote.text}")
+        print("-" * 60)
 
 
 if __name__ == "__main__":
