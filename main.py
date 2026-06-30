@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 
 def main():
@@ -6,7 +7,11 @@ def main():
 
     response = requests.get(url)
 
-    print(response.status_code)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    title = soup.title.text
+
+    print(f"Page title: {title}")
 
 
 if __name__ == "__main__":
