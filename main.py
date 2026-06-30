@@ -16,14 +16,29 @@ def main():
 
         writer = csv.writer(file)
 
-        writer.writerow(["Quote", "Author"])
+        writer.writerow([
+            "Quote",
+            "Author",
+            "Tags"
+        ])
 
         for block in quote_blocks:
 
             quote = block.find("span", class_="text").text
             author = block.find("small", class_="author").text
 
-            writer.writerow([quote, author])
+            tags = block.find_all("a", class_="tag")
+
+            tag_list = []
+
+            for tag in tags:
+                tag_list.append(tag.text)
+
+            writer.writerow([
+                quote,
+                author,
+                ", ".join(tag_list)
+            ])
 
     print("quotes.csv created successfully.")
 
